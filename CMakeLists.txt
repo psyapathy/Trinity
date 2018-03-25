@@ -5,7 +5,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 COMPONENTS Core Quick Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick Widgets WebEngine REQUIRED)
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
@@ -29,9 +29,10 @@ add_executable(${PROJECT_NAME}
     include/roomlistsortmodel.h
     include/emotelistmodel.h
     src/emotelistmodel.cpp
-    include/emote.h)
+    include/emote.h
+    include/callobject.h)
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Quick Qt5::Widgets cmark)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Quick Qt5::Widgets Qt5::WebEngine cmark)
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

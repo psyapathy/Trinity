@@ -20,6 +20,10 @@
         <file alias="icons/settings.png">resources/icons/settings.png</file>
         <file alias="icons/memberlist.png">resources/icons/memberlist.png</file>
         <file alias="icons/download.png">resources/icons/download.png</file>
-        <file>ImageViewer.qml</file>
+        <file alias="icons/call.png">resources/icons/call.png</file>
+        <file alias="ImageViewer.qml">qml/ImageViewer.qml</file>
+        <file alias="CallDialog.qml">qml/CallDialog.qml</file>
+        <file alias="call.js">resources/call.js</file>
+        <file alias="call.html">resources/call.html</file>
     </qresource>
 </RCC>

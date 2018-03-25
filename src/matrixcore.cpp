@@ -697,6 +697,24 @@ void MatrixCore::updateMemberCommunities(Member* member) {
     });
 }
 
+void MatrixCore::answerCall(Room* room, const QString &callId, const QJsonValue &session) {
+    const QJsonObject answerObject {
+        {"call_id", callId},
+        {"answer", session.toObject()},
+        {"version", 0}
+    };
+
+    network::putJSON("/_matrix/client/r0/rooms/" + room->getId()  + "/send/m.call.answer/" + QRandomGenerator::global()->generate(), answerObject);
+}
+
+void MatrixCore::hangupCall(Room* room, const QString &callId) {
+    const QJsonObject hangupObject {
+        {"call_id", callId}
+    };
+
+    network::putJSON("/_matrix/client/r0/rooms/" + room->getId()  + "/send/m.call.hangup/" + QRandomGenerator::global()->generate(), hangupObject);
+}
+
 bool MatrixCore::settingsValid() {
     QSettings settings;
     return settings.contains("accessToken");
@@ -940,6 +958,11 @@ void MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
         }
 
         roomListModel.updateRoom(&room);
+    } else if(eventType == "m.call.invite") {
+        if(event["content"].toObject()["lifetime"].toInt() > event["unsigned"].toObject()["age"].toInt())
+            emit callInvite(&room, event["sender"].toString(), event);
+
+        return;
     } else
         return;
 
@@ -972,8 +995,8 @@ void MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
             e->setAttachment(getMXCMediaURL(event["content"].toObject()["url"].toString()));
             e->setAttachmentSize(event["content"].toObject()["info"].toObject()["size"].toInt());
 
-            if(event["content"].toObject()["info"].toObject().contains("thumbnail_url"))
-                e->setThumbnail(getMXCThumbnailURL(event["content"].toObject()["info"].toObject()["thumbnail_url"].toString()));
+                if(event["content"].toObject()["info"].toObject().contains("thumbnail_url"))
+                    e->setThumbnail(getMXCThumbnailURL(event["content"].toObject()["info"].toObject()["thumbnail_url"].toString()));
             else
                 e->setThumbnail(getMXCMediaURL(event["content"].toObject()["url"].toString()));
 

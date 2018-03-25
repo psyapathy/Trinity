@@ -64,6 +64,10 @@ public:
     // member
     Q_INVOKABLE void updateMemberCommunities(Member* member);
 
+    // VOIP
+    Q_INVOKABLE void answerCall(Room* room, const QString& callId, const QJsonValue& session);
+    Q_INVOKABLE void hangupCall(Room* room, const QString& callId);
+
     // client related
     Q_INVOKABLE bool settingsValid();
 
@@ -129,6 +133,7 @@ signals:
     void typingTextChanged();
     void markdownEnabledChanged();
     void localEmotesChanged();
+    void callInvite(Room* room, QString from, QJsonObject event);
 
 private:
     void consumeEvent(const QJsonObject& event, Room& room, const bool insertFront = true);

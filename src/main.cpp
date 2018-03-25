@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QtQuick/QQuickWindow>
+#include <qtwebengineglobal.h>
 
 #include "eventmodel.h"
 #include "membermodel.h"
@@ -19,6 +20,7 @@
 #include "community.h"
 #include "roomlistsortmodel.h"
 #include "emote.h"
+#include "callobject.h"
 
 QNetworkAccessManager* network::manager;
 QString network::homeserverURL, network::accessToken;
@@ -44,9 +46,12 @@ int main(int argc, char* argv[]) {
     qmlRegisterUncreatableType<Community>("trinity.matrix", 1, 0, "Community", "");
     qmlRegisterUncreatableType<Emote>("trinity.matrix", 1, 0, "Emote", "");
     qmlRegisterType<CommunityListModel>("trinity.matrix", 1, 0, "CommunityListModel");
+    qmlRegisterType<CallObject>("trinity.matrix", 1, 0, "CallObject");
 
     // platform
     qmlRegisterUncreatableType<Desktop>("trinity.platform.desktop", 1, 0, "Desktop", "");
+
+    QtWebEngine::initialize();
 
     QQmlApplicationEngine engine;
     QQmlContext* context = new QQmlContext(engine.rootContext(), &engine);

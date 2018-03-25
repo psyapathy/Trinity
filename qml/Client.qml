@@ -1049,6 +1049,14 @@ Rectangle {
             if(shouldDisplay)
                 desktop.showMessage(matrix.resolveMemberId(sender).displayName + " (" + room.name + ")", content)
         }
+
+        onCallInvite: {
+            var popup = Qt.createComponent("qrc:/CallDialog.qml")
+            var popupContainer = popup.createObject(window, {"parent": window, callId: event["content"]["call_id"], originatingRoom: room, from: matrix.resolveMemberId(from).displayName})
+
+            popupContainer.open()
+            popupContainer.offer(event["content"]["offer"])
+        }
     }
 
     FileDialog {
