@@ -833,10 +833,8 @@ void MatrixCore::loadDirectory() {
                     r->setId(roomId);
                     r->setName(roomObject["name"].toString());
 
-                    if(!roomObject["avatar_url"].isNull()) {
-                        const QString imageId = roomObject["avatar_url"].toString().remove("mxc://");
-                        r->setAvatar(network::homeserverURL + "/_matrix/media/r0/thumbnail/" + imageId + "?width=64&height=64&method=scale");
-                    }
+                    if(!roomObject["avatar_url"].isNull() && !roomObject["avatar_url"].toString().isEmpty())
+                        r->setAvatar(getMXCThumbnailURL(roomObject["avatar_url"].toString()));
 
                     r->setTopic(roomObject["topic"].toString());
 

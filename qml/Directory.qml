@@ -66,7 +66,26 @@ Rectangle {
                     width: 32
                     height: 32
 
-                    source: avatarURL
+                    anchors.top: parent.top
+                    anchors.topMargin: 15
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+
+                    source: avatarURL ? avatarURL : "placeholder.png"
+
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Item {
+                            width: roomAvatar.width
+                            height: roomAvatar.height
+                            Rectangle {
+                                anchors.centerIn: parent
+                                width: roomAvatar.width
+                                height: roomAvatar.height
+                                radius: Math.min(width, height)
+                            }
+                        }
+                    }
                 }
 
                 Text {
