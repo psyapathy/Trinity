@@ -233,10 +233,8 @@ void MatrixCore::sync() {
                     return;
                 }
 
-                if(document.object().contains("url")) {
-                    const QString imageId = document.object()["url"].toString().remove("mxc://");
-                    room->setAvatar(network::homeserverURL + "/_matrix/media/r0/thumbnail/" + imageId + "?width=64&height=64&method=scale");
-                }
+                if(document.object().contains("url") && !document.object()["url"].toString().isEmpty())
+                    room->setAvatar(getMXCThumbnailURL(document.object()["url"].toString()));
 
                 roomListModel.updateRoom(room);
             });
@@ -264,9 +262,8 @@ void MatrixCore::sync() {
                         room->setInvitedBy(event.toObject()["sender"].toString());
                     else if(type == "m.room.name") {
                         room->setName(event.toObject()["content"].toObject()["name"].toString());
-                    } else if(type == "m.room.avatar") {
-                        const QString imageId = event.toObject()["content"].toObject()["url"].toString().remove("mxc://");
-                        room->setAvatar(network::homeserverURL + "/_matrix/media/r0/thumbnail/" + imageId + "?width=64&height=64&method=scale");
+                    } else if(type == "m.room.avatar" && !event.toObject()["content"].toObject()["url"].toString().isEmpty()) {
+                        room->setAvatar(getMXCThumbnailURL(event.toObject()["content"].toObject()["url"].toString()));
                     }
 
                     roomListModel.updateRoom(room);

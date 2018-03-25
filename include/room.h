@@ -18,7 +18,7 @@ class Event : public QObject
     Q_PROPERTY(QString thumbnail READ getThumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(bool sent READ getSent NOTIFY sentChanged)
     Q_PROPERTY(double sentProgress READ getSentProgress NOTIFY sentProgressChanged)
-    Q_PROPERTY(QString eventId MEMBER eventId)
+    Q_PROPERTY(QString eventId MEMBER eventId NOTIFY eventIdChanged)
 public:
     Event(QObject* parent = nullptr) : QObject(parent) {}
 
@@ -122,6 +122,7 @@ signals:
     void thumbnailChanged();
     void sentChanged();
     void sentProgressChanged();
+    void eventIdChanged();
 };
 
 class Member : public QObject {
