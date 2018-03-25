@@ -651,11 +651,11 @@ Rectangle {
 
                             propagateComposedEvents: true
 
-                            onClicked: contextMenu.popup()
+                            onClicked: messageContextMenu.popup()
                         }
 
                         Menu {
-                            id: contextMenu
+                            id: messageContextMenu
 
                             MenuItem {
                                 text: "Remove"
