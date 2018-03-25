@@ -462,7 +462,7 @@ Rectangle {
                             anchors.top: parent.top
                             anchors.topMargin: 5
                             anchors.left: parent.left
-                            anchors.leftMargin: 5
+                            anchors.leftMargin: 10
 
                             sourceSize.width: 33
                             sourceSize.height: 33
@@ -491,10 +491,10 @@ Rectangle {
 
                             text: condense ? "" : sender.displayName
 
-                            color: "white"
+                            color: "gray"
 
                             anchors.left: avatar.right
-                            anchors.leftMargin: 10
+                            anchors.leftMargin: 20
 
                             textFormat: Text.PlainText
                         }
@@ -524,10 +524,10 @@ Rectangle {
                                     return preview.height
                             }
 
-                            width: parent.width
+                            width: parent.width - (condense ? 63 : 20)
 
                             anchors.left: condense ? parent.left : avatar.right
-                            anchors.leftMargin: condense ? 48 : 10
+                            anchors.leftMargin: condense ? 63 : 20
 
                             color: "transparent"
 
@@ -643,6 +643,8 @@ Rectangle {
                         }
 
                         MouseArea {
+                            id: messageMouseArea
+
                             anchors.fill: messageArea
 
                             acceptedButtons: Qt.RightButton
@@ -671,6 +673,31 @@ Rectangle {
                                 text: "Quote"
 
                                 onReleased: messageInput.append("> " + msg + "\n\n")
+                            }
+                        }
+
+                        MouseArea {
+                            id: avatarMouseArea
+
+                            anchors.fill: avatar
+
+                            acceptedButtons: Qt.RightButton
+
+                            onClicked: avatarMenu.popup()
+                        }
+
+                        Menu {
+                            id: avatarMenu
+
+                            MenuItem {
+                                text: "Profile"
+
+                                onReleased: {
+                                    var popup = Qt.createComponent("qrc:/Profile.qml")
+                                    var popupContainer = popup.createObject(client, {"parent": client, "member": sender})
+
+                                    popupContainer.open()
+                                }
                             }
                         }
                     }
