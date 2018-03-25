@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     MatrixCore matrix;
     Desktop desktop;
 
-    QSystemTrayIcon* trayIcon = new QSystemTrayIcon();
+    QSystemTrayIcon* trayIcon = new QSystemTrayIcon(QIcon(":/icons/trinity-idle.png"));
 
     desktop.icon = trayIcon;
 

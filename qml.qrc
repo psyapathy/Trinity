@@ -25,5 +25,6 @@
         <file alias="CallDialog.qml">qml/CallDialog.qml</file>
         <file alias="call.js">resources/call.js</file>
         <file alias="call.html">resources/call.html</file>
+        <file alias="icons/trinity-idle.png">resources/icons/trinity-idle.png</file>
     </qresource>
 </RCC>
