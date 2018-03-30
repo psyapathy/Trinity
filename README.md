@@ -19,6 +19,22 @@ WIP Qt5 QML Matrix client
 * Qt5
 * CMark
 
+## Packages
+Arch Linux (AUR)
+[Link to repo](https://github.com/nhatzHK/trinity-aur)
+
+## Building
+Make sure to install ALL of the dependencies listed above!!
+
+Create a build directory and enter it:
+`mkdir build && cd build`
+
+Invoke CMake:
+`cmake ..`
+
+Compile using the chosen build system (in this case, make):
+`make`
+
 ## License
 Trinity's source is distributed under the GPLv3 license. See the `LICENSE` file for more details.
 
