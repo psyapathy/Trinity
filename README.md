@@ -20,8 +20,8 @@ WIP Qt5 QML Matrix client
 * CMark
 
 ## Packages
-Arch Linux (AUR)
-[Link to repo](https://github.com/nhatzHK/trinity-aur)
+Arch Linux
+[Link to AUR](https://aur.archlinux.org/packages/trinity-matrix-git/)
 
 ## Building
 Make sure to install ALL of the dependencies listed above!!
