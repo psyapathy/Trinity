@@ -149,6 +149,30 @@ void MatrixCore::logout() {
     settings.remove("deviceId");
     settings.remove("userId");
     settings.sync();
+
+    rooms.clear();
+    nextBatch.clear();
+    userId.clear();
+    displayName.clear();
+    invitedRooms.clear();
+    joinedRooms.clear();
+    publicRooms.clear();
+    joinedCommunities.clear();
+    joinedCommunitiesIds.clear();
+    unsentMessages.clear();
+    idToMember.clear();
+    idToCommunity.clear();
+    idToRoom.clear();
+    typingText.clear();
+
+    eventModel.fullUpdate();
+    roomListModel.fullUpdate();
+    directoryListModel.fullUpdate();
+    memberModel.fullUpdate();
+
+    currentRoom = &emptyRoom;
+
+    firstSync = true;
 }
 
 void MatrixCore::updateAccountInformation() {
@@ -821,6 +845,9 @@ Room* MatrixCore::resolveRoomId(const QString &id) const {
 }
 
 Room* MatrixCore::getRoom(const unsigned int index) const {
+    if(index >= rooms.size())
+        return const_cast<Room*>(&emptyRoom); // FIXME: why is this needed?
+
     return rooms[index];
 }
 

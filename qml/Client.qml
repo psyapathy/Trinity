@@ -608,7 +608,7 @@ Rectangle {
                             sourceSize.width: 33
                             sourceSize.height: 33
 
-                            source: sender.avatarURL ? sender.avatarURL : "placeholder.png"
+                            source: sender ? (sender.avatarURL ? sender.avatarURL : "placeholder.png") : "placeholder.png"
 
                             visible: !condense
 
@@ -630,7 +630,7 @@ Rectangle {
                         Text {
                             id: senderText
 
-                            text: condense ? "" : sender.displayName
+                            text: condense ? "" : (sender ? sender.displayName : "Unknown")
 
                             color: "white"
 
@@ -1243,7 +1243,7 @@ Rectangle {
                     shouldDisplay = true
             }
 
-            if(shouldDisplay)
+            if(shouldDisplay && sender)
                 desktop.showMessage(matrix.resolveMemberId(sender).displayName + " (" + room.name + ")", content)
         }
 

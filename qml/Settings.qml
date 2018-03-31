@@ -148,12 +148,12 @@ Rectangle {
                     anchors.left: saveButton.right
 
                     onClicked: {
+                        stack.pop();
+                        stack.push("qrc:/Login.qml")
+
                         matrix.logout();
 
                         desktop.showTrayIcon(false)
-
-                        stack.pop();
-                        stack.push("qrc:/Login.qml")
                     }
                 }
 
