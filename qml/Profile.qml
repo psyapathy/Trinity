@@ -1,5 +1,6 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.3
+import QtGraphicalEffects 1.0
 
 import trinity.matrix 1.0
 
@@ -24,7 +25,32 @@ Popup {
         width: 64
         height: 64
 
+        sourceSize.width: 64
+        sourceSize.height: 64
+
         source: member.avatarURL ? member.avatarURL : "placeholder.png"
+
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Item {
+                width: profileAvatar.width
+                height: profileAvatar.height
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: profileAvatar.width
+                    height: profileAvatar.height
+                    radius: Math.min(width, height)
+                }
+            }
+        }
+    }
+
+    MouseArea {
+        anchors.fill: profileAvatar
+
+        cursorShape: member.avatarURL ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+        onReleased: if(member.avatarURL) showImage(member.avatarURL)
     }
 
     Text {
@@ -46,7 +72,7 @@ Popup {
 
         anchors.verticalCenter: profileNameLabel.verticalCenter
         anchors.left: profileNameLabel.right
-        anchors.leftMargin: 10
+        anchors.leftMargin: 5
 
         text: member.id
 

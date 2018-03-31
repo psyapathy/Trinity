@@ -784,10 +784,7 @@ Rectangle {
                                         color: parent.hovered ? "white" : Qt.rgba(0.8, 0.8, 0.8, 1.0)
                                     }
 
-                                    onClicked: {
-                                        console.log(attachment)
-                                        Qt.openUrlExternally(attachment)
-                                    }
+                                    onClicked: Qt.openUrlExternally(attachment)
                                 }
                             }
                         }

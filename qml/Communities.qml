@@ -75,11 +75,28 @@ Rectangle {
                     width: 32
                     height: 32
 
+                    sourceSize.width: 32
+                    sourceSize.height: 32
+
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 10
 
                     source: display.avatar
+
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Item {
+                            width: communityAvatar.width
+                            height: communityAvatar.height
+                            Rectangle {
+                                anchors.centerIn: parent
+                                width: communityAvatar.width
+                                height: communityAvatar.height
+                                radius: Math.min(width, height)
+                            }
+                        }
+                    }
                 }
 
                 Text {

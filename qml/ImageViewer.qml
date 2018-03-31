@@ -1,9 +1,18 @@
-import QtQuick 2.0
+import QtQuick 2.6
+import QtQuick.Controls 2.3
 
-Rectangle {
-    anchors.fill: parent
+Popup {
+    id: dialog
 
-    color: Qt.rgba(0.0, 0.0, 0.0, 0.5)
+    width: imagePreview.paintedWidth
+    height: imagePreview.height + downloadLink.contentHeight
+
+    x: parent.width / 2 - width / 2
+    y: parent.height / 2 - height / 2
+
+    modal: true
+
+    background: null
 
     property string url
 
@@ -21,7 +30,8 @@ Rectangle {
     Text {
         id: downloadLink
 
-        anchors.right: imagePreview.right
+        x: imagePreview.x + (imagePreview.width - imagePreview.paintedWidth / 2) - contentWidth - 13
+
         anchors.top: imagePreview.bottom
         anchors.topMargin: 5
 
@@ -38,13 +48,5 @@ Rectangle {
 
             onReleased: Qt.openUrlExternally(url)
         }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-
-        propagateComposedEvents: true
-
-        onReleased: parent.destroy()
     }
 }

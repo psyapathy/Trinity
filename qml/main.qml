@@ -21,6 +21,8 @@ ApplicationWindow {
     property var showImage: function(url) {
         var popup = Qt.createComponent("qrc:/ImageViewer.qml")
         var popupContainer = popup.createObject(window, {"parent": window, "url": url})
+
+        popupContainer.open()
     }
 
     Component.onCompleted: {

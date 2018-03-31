@@ -36,7 +36,32 @@ Rectangle {
             width: 64
             height: 64
 
+            sourceSize.width: 64
+            sourceSize.height: 64
+
             source: community.avatar
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Item {
+                    width: communityAvatar.width
+                    height: communityAvatar.height
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: communityAvatar.width
+                        height: communityAvatar.height
+                        radius: Math.min(width, height)
+                    }
+                }
+            }
+        }
+
+        MouseArea {
+            anchors.fill: communityAvatar
+
+            cursorShape: Qt.PointingHandCursor
+
+            onReleased: showImage(community.avatar)
         }
 
         Text {
