@@ -811,7 +811,7 @@ Rectangle {
                                 width: 15
                                 height: 15
 
-                                visible: index < 5
+                                visible: settings.showReadAcknowledgements && index < 5
 
                                 onStatusChanged: if(status == Image.Error || status == Image.Null) source = "placeholder.png"
 
@@ -1011,6 +1011,8 @@ Rectangle {
                     text: matrix.typingText
 
                     textFormat: Text.PlainText
+
+                    visible: settings.showTypingNotifications
                 }
             }
         }

@@ -5,7 +5,7 @@ import QtQuick.Shapes 1.0
 import QtQuick.Dialogs 1.2
 
 Rectangle {
-    id: settings
+    id: userSettings
 
     color: Qt.rgba(0.1, 0.1, 0.1, 1.0)
 
@@ -171,6 +171,22 @@ Rectangle {
 
             Item {
                 id: appearanceTab
+
+                Column {
+                    CheckBox {
+                        text: "Show typing notifications"
+
+                        checked: settings.showTypingNotifications
+                        onCheckedChanged: settings.showTypingNotifications = checked
+                    }
+
+                    CheckBox {
+                        text: "Show read acknowledgements"
+
+                        checked: settings.showReadAcknowledgements
+                        onCheckedChanged: settings.showReadAcknowledgements = checked
+                    }
+                }
             }
 
             Item {

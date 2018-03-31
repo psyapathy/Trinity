@@ -21,6 +21,7 @@
 #include "roomlistsortmodel.h"
 #include "emote.h"
 #include "callobject.h"
+#include "settings.h"
 
 QNetworkAccessManager* network::manager;
 QString network::homeserverURL, network::accessToken;
@@ -43,6 +44,7 @@ int main(int argc, char* argv[]) {
     qmlRegisterUncreatableType<Member>("trinity.matrix", 1, 0, "Member", "");
     qmlRegisterUncreatableType<Community>("trinity.matrix", 1, 0, "Community", "");
     qmlRegisterUncreatableType<Emote>("trinity.matrix", 1, 0, "Emote", "");
+    qmlRegisterUncreatableType<Settings>("trinity.matrix", 1, 0, "Settings", "");
     qmlRegisterType<CommunityListModel>("trinity.matrix", 1, 0, "CommunityListModel");
     qmlRegisterType<CallObject>("trinity.matrix", 1, 0, "CallObject");
 
@@ -56,6 +58,7 @@ int main(int argc, char* argv[]) {
 
     MatrixCore matrix;
     Desktop desktop;
+    Settings settings;
 
     QSystemTrayIcon* trayIcon = new QSystemTrayIcon(QIcon(":/icons/trinity-idle.png"));
 
@@ -63,6 +66,7 @@ int main(int argc, char* argv[]) {
 
     context->setContextProperty("desktop", &desktop);
     context->setContextProperty("matrix", &matrix);
+    context->setContextProperty("settings", &settings);
 
     QQmlComponent component(&engine);
     component.loadUrl(QUrl("qrc:/main.qml"));

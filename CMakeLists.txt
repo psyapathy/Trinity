@@ -17,7 +17,8 @@ set(TRINITY_SRCS
     src/roomlistmodel.cpp
     src/membermodel.cpp
     src/communitylistmodel.cpp
-    src/roomlistsortmodel.cpp)
+    src/roomlistsortmodel.cpp
+    src/settings.cpp)
 
 set(TRINITY_HEADERS
     include/eventmodel.h
@@ -32,7 +33,8 @@ set(TRINITY_HEADERS
     include/roomlistsortmodel.h
     include/emotelistmodel.h
     include/emote.h
-    include/callobject.h)
+    include/callobject.h
+    include/settings.h)
 
 add_executable(Trinity qml.qrc ${TRINITY_SRCS} ${TRINITY_HEADERS})
 
