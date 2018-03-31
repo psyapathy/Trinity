@@ -18,17 +18,33 @@ Rectangle {
 
         color: "transparent"
 
-        Button {
+        BackButton {
             id: backButton
 
-            text: "Back"
-            onClicked: stack.pop()
+            anchors.top: parent.top
+            anchors.topMargin: 15
+
+            anchors.right: parent.right
+        }
+
+        Text {
+            id: roomNameLabel
+
+            anchors.top: parent.top
+            anchors.topMargin: 15
+
+            text: room.name
+
+            font.pointSize: 25
+            font.bold: true
+
+            color: "white"
         }
 
         TabBar {
             id: bar
 
-            anchors.top: backButton.bottom
+            anchors.top: roomNameLabel.bottom
 
             TabButton {
                 text: "Overview"

@@ -18,11 +18,13 @@ Rectangle {
 
         color: "transparent"
 
-        Button {
+        BackButton {
             id: backButton
 
-            text: "Back"
-            onClicked: stack.pop()
+            anchors.top: parent.top
+            anchors.topMargin: 15
+
+            anchors.right: parent.right
         }
 
         Image {
