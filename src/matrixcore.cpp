@@ -275,7 +275,7 @@ void MatrixCore::sync() {
 
         for(const auto id : document.object()["rooms"].toObject()["join"].toObject().keys()) {
             if(!joinedRooms.count(id)) {
-                createRoom(id, "Joined");
+                createRoom(id, "Rooms");
                 joinedRooms.push_back(id);
             }
         }
@@ -372,7 +372,7 @@ void MatrixCore::sync() {
                 else
                     community = idToCommunity[id];
 
-                community->setJoinState("Joined");
+                community->setJoinState("Rooms");
 
                 joinedCommunities.push_back(community);
                 joinedCommunitiesIds.push_back(community->getId());
@@ -559,7 +559,7 @@ void MatrixCore::joinRoom(const QString& id) {
 
                 for(const auto roomObject : rooms) {
                     if(roomObject->getId() == id) {
-                        roomObject->setJoinState("Joined");
+                        roomObject->setJoinState("Rooms");
                         roomObject->setGuestDenied(false);
 
                         emit roomListChanged();

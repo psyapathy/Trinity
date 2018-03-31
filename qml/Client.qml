@@ -7,129 +7,194 @@ import trinity.matrix 1.0
 
 Rectangle {
     id: client
-    color: Qt.rgba(0.05, 0.05, 0.05, 1.0)
 
     property bool shouldScroll: false
 
-    ListView {
-       id: channels
-       width: 180
-       height: parent.height
-       anchors.right: rightArea.left
-       anchors.left: client.left
+    Rectangle {
+        id: sidebar
 
-       model: matrix.roomListModel
+        width: 195
+        height: parent.height
 
-       section.property: "section"
-       section.criteria: ViewSection.FullString
-       section.delegate: Rectangle {
+        anchors.right: rightArea.left
+        anchors.left: client.left
+
+        z: 8
+
+        LinearGradient {
+            anchors.fill: parent
+            start: Qt.point(0, 0)
+            end: Qt.point(0, parent.height)
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#22232c" }
+                GradientStop { position: 1.0; color: "#23242d" }
+            }
+        }
+
+        Rectangle {
+            id: userHeader
+
+            height: 55
+            width: parent.width
+
+            anchors.top: parent.top
+
+            color: "#23242d"
+
+            Text {
+                x: 15
+                y: 15
+
+                text: matrix.displayName
+
+                color: "white"
+            }
+        }
+
+        DropShadow {
+            anchors.fill: userHeader
+            verticalOffset: 6
+            radius: 8.0
+            samples: 12
+            cached: true
+            source: userHeader
+            opacity: 0.1
+
+            z: 2
+        }
+
+        ListView {
+           id: channels
+
+           anchors.top: userHeader.bottom
+           anchors.topMargin: 10
+
+           height: parent.height - userHeader.height
            width: parent.width
-           height: 25
 
-           color: "transparent"
+           clip: true
 
-           Text {
-               anchors.verticalCenter: parent.verticalCenter
+           model: matrix.roomListModel
+
+           spacing: 5
+
+           ScrollBar.vertical: ScrollBar {}
+           boundsBehavior: Flickable.StopAtBounds
+
+           section.property: "section"
+           section.criteria: ViewSection.FullString
+           section.delegate: Rectangle {
+               width: parent.width
+               height: 25
+
+               color: "transparent"
 
                anchors.left: parent.left
-               anchors.leftMargin: 5
+               anchors.leftMargin: 12
 
-               text: section
+               Text {
+                   anchors.verticalCenter: parent.verticalCenter
 
-               color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+                   anchors.left: parent.left
+                   anchors.leftMargin: 5
 
-               textFormat: Text.PlainText
+                   text: section
+
+                   color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+
+                   textFormat: Text.PlainText
+               }
            }
-       }
 
-       delegate: Rectangle {
-            width: parent.width
-            height: 25
+           delegate: Rectangle {
+                width: parent.width - 24
+                height: 25
 
-            property bool selected: channels.currentIndex === matrix.roomListModel.getOriginalIndex(index)
+                property bool selected: channels.currentIndex === matrix.roomListModel.getOriginalIndex(index)
 
-            color: selected ? "white" : "transparent"
+                color: selected ? "white" : "transparent"
 
-            radius: 5
+                radius: 3
 
-            Image {
-                id: roomAvatar
-
-                cache: true
-
-                anchors.top: parent.top
-                anchors.topMargin: 5
                 anchors.left: parent.left
-                anchors.leftMargin: 5
+                anchors.leftMargin: 12
 
-                width: 18
-                height: 18
+                Image {
+                    id: roomAvatar
 
-                sourceSize.width: 18
-                sourceSize.height: 18
+                    cache: true
 
-                source: avatarURL ? avatarURL : "placeholder.png"
+                    anchors.top: parent.top
+                    anchors.topMargin: 5
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
 
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: Item {
-                        width: roomAvatar.width
-                        height: roomAvatar.height
-                        Rectangle {
-                            anchors.centerIn: parent
+                    width: 18
+                    height: 18
+
+                    sourceSize.width: 18
+                    sourceSize.height: 18
+
+                    source: avatarURL ? avatarURL : "placeholder.png"
+
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Item {
                             width: roomAvatar.width
                             height: roomAvatar.height
-                            radius: Math.min(width, height)
+                            Rectangle {
+                                anchors.centerIn: parent
+                                width: roomAvatar.width
+                                height: roomAvatar.height
+                                radius: Math.min(width, height)
+                            }
                         }
                     }
                 }
-            }
 
-            Text {
-                text: alias
+                Text {
+                    text: alias
 
-                anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenter: parent.verticalCenter
 
-                anchors.left: roomAvatar.right
-                anchors.leftMargin: 5
+                    anchors.left: roomAvatar.right
+                    anchors.leftMargin: 5
 
-                color: selected ? "black" : (highlightCount > 0 ? "red" : (notificationCount > 0 ? "blue" : "white"))
+                    color: selected ? "black" : (highlightCount > 0 ? "red" : (notificationCount > 0 ? "blue" : "white"))
 
-                textFormat: Text.PlainText
-            }
-
-            MouseArea {
-                anchors.fill: parent
-
-                cursorShape: Qt.PointingHandCursor
-
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-                onReleased: {
-                    if(mouse.button == Qt.LeftButton) {
-                        if(!selected) {
-                            var originalIndex = matrix.roomListModel.getOriginalIndex(index)
-                            matrix.changeCurrentRoom(originalIndex)
-                            channels.currentIndex = originalIndex
-                        }
-                    } else
-                        contextMenu.popup()
-                }
-            }
-
-            Menu {
-                id: contextMenu
-
-                MenuItem {
-                    text: "Mark As Read"
-
-                    onReleased: matrix.readUpTo(matrix.getRoom(matrix.roomListModel.getOriginalIndex(index)), 0)
+                    textFormat: Text.PlainText
                 }
 
-                MenuSeparator {}
+                MouseArea {
+                    anchors.fill: parent
 
-                GroupBox {
-                    title: "Notification Settings"
+                    cursorShape: Qt.PointingHandCursor
+
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                    onReleased: {
+                        if(mouse.button == Qt.LeftButton) {
+                            if(!selected) {
+                                var originalIndex = matrix.roomListModel.getOriginalIndex(index)
+                                matrix.changeCurrentRoom(originalIndex)
+                                channels.currentIndex = originalIndex
+                            }
+                        } else
+                            contextMenu.popup()
+                    }
+                }
+
+                Menu {
+                    id: contextMenu
+
+                    MenuItem {
+                        text: "Mark As Read"
+
+                        onReleased: matrix.readUpTo(matrix.getRoom(matrix.roomListModel.getOriginalIndex(index)), 0)
+                    }
+
+                    MenuSeparator {}
+
 
                     Column {
                         spacing: 10
@@ -164,86 +229,179 @@ Rectangle {
 
                             onReleased: matrix.getRoom(matrix.roomListModel.getOriginalIndex(index)).notificationLevel = 0
 
-                            checked: matrix.getRoom(matrix.roomListModel.getOriginalIndex(index)).notificationLevel === 3
+                            checked: matrix.getRoom(matrix.roomListModel.getOriginalIndex(index)).notificationLevel === 0
+                        }
+                    }
+
+                    MenuSeparator {}
+
+                    MenuItem {
+                        text: "Room Settings"
+
+                        onReleased: stack.push("qrc:/RoomSettings.qml", {"room": matrix.getRoom(matrix.roomListModel.getOriginalIndex(index))})
+                    }
+
+                    MenuSeparator {}
+
+                    MenuItem {
+                        text: "Leave Room"
+
+                        onReleased: {
+                            showDialog("Leave Confirmation", "Are you sure you want to leave " + alias + "?", [
+                                           {
+                                               text: "Yes",
+                                               onClicked: function(dialog) {
+                                                    matrix.leaveRoom(id)
+                                                    dialog.close()
+                                               }
+                                           },
+                                           {
+                                               text: "No",
+                                               onClicked: function(dialog) {
+                                                   dialog.close()
+                                               }
+                                           }
+                                       ])
                         }
                     }
                 }
+           }
+        }
 
-                MenuSeparator {}
+        ToolButton {
+            id: directoryButton
 
-                MenuItem {
-                    text: "Room Settings"
+            width: 28
+            height: 28
 
-                    onReleased: stack.push("qrc:/RoomSettings.qml", {"room": matrix.getRoom(matrix.roomListModel.getOriginalIndex(index))})
-                }
+            x: 35
+            y: parent.height - 50
 
-                MenuSeparator {}
+            onClicked: stack.push("qrc:/Directory.qml")
 
-                MenuItem {
-                    text: "Leave Room"
+            background: Rectangle {
+                color: "#1e74fd"
 
-                    onReleased: {
-                        showDialog("Leave Confirmation", "Are you sure you want to leave " + alias + "?", [
-                                       {
-                                           text: "Yes",
-                                           onClicked: function(dialog) {
-                                                matrix.leaveRoom(id)
-                                                dialog.close()
-                                           }
-                                       },
-                                       {
-                                           text: "No",
-                                           onClicked: function(dialog) {
-                                               dialog.close()
-                                           }
-                                       }
-                                   ])
-                    }
-                }
+                radius: 35
             }
-       }
-    }
 
-    Button {
-        id: communitiesButton
+            Image {
+                id: directoryButtonImage
 
-        width: channels.width
+                anchors.centerIn: parent
 
-        anchors.bottom: channels.bottom
+                width: 23
+                height: 23
 
-        text: "Communities"
+                sourceSize.width: width
+                sourceSize.height: height
 
-        onClicked: stack.push("qrc:/Communities.qml")
-    }
+                source: "icons/directory.png"
+            }
 
-    Button {
-        id: directoryButton
+            ColorOverlay {
+                anchors.fill: directoryButtonImage
+                source: directoryButtonImage
 
-        width: channels.width
+                color: "white"
+            }
+        }
 
-        anchors.bottom: communitiesButton.top
+        ToolButton {
+            id: communitiesButton
 
-        text: "Directory"
+            width: 28
+            height: 28
 
-        onClicked: stack.push("qrc:/Directory.qml")
+            x: 81
+            y: parent.height - 50
+
+            onClicked: stack.push("qrc:/Communities.qml")
+
+            background: Rectangle {
+                color: "#1e74fd"
+
+                radius: 35
+            }
+
+            Image {
+                id: communitiesButtonImage
+
+                anchors.centerIn: parent
+
+                width: 21
+                height: 21
+
+                sourceSize.width: width
+                sourceSize.height: height
+
+                source: "icons/communities.png"
+            }
+
+            ColorOverlay {
+                anchors.fill: communitiesButtonImage
+                source: communitiesButtonImage
+
+                color: "white"
+            }
+        }
+
+        ToolButton {
+            id: settingsButton
+
+            width: 28
+            height: 28
+
+            x: 125
+            y: parent.height - 50
+
+            onClicked: stack.push("qrc:/Settings.qml")
+
+            background: Rectangle {
+                color: "#1e74fd"
+
+                radius: 35
+            }
+
+            Image {
+                id: settingsButtonImage
+
+                anchors.centerIn: parent
+
+                width: 22
+                height: 22
+
+                sourceSize.width: width
+                sourceSize.height: height
+
+                source: "icons/settings.png"
+            }
+
+            ColorOverlay {
+                anchors.fill: settingsButtonImage
+                source: settingsButtonImage
+
+                color: "white"
+            }
+        }
     }
 
     Rectangle {
         id: rightArea
         height: parent.height
-        width: parent.width - channels.width
-        anchors.left: channels.right
-
-        color: "green"
+        width: parent.width - sidebar.width
+        anchors.left: sidebar.right
 
         Rectangle {
             id: roomHeader
-            height: 45
+            height: 55
             width: parent.width
 
             anchors.bottom: messagesArea.top
 
-            color: Qt.rgba(0.3, 0.3, 0.3, 1.0)
+            color: "#2c2d35"
+
+            z: 4
 
             Image {
                 id: channelAvatar
@@ -259,8 +417,6 @@ Rectangle {
 
                 sourceSize.width: 33
                 sourceSize.height: 33
-
-                fillMode: Image.PreserveAspectFit
 
                 source: matrix.currentRoom.avatar ? matrix.currentRoom.avatar : "placeholder.png"
 
@@ -284,7 +440,8 @@ Rectangle {
 
                 font.pointSize: 15
 
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 4
                 anchors.leftMargin: 15
                 anchors.left: channelAvatar.right
 
@@ -300,12 +457,11 @@ Rectangle {
 
                 width: showMemberListButton.x - x
 
-                font.pointSize: 12
+                font.pointSize: 10
 
-                anchors.verticalCenter: parent.verticalCenter
-
-                anchors.left: channelTitle.right
-                anchors.leftMargin: 5
+                anchors.top: channelTitle.bottom
+                anchors.leftMargin: 15
+                anchors.left: channelAvatar.right
 
                 text: {
                     if(matrix.currentRoom.direct)
@@ -340,8 +496,8 @@ Rectangle {
 
                 anchors.verticalCenter: parent.verticalCenter
 
-                anchors.right: settingsButton.left
-                anchors.rightMargin: 10
+                anchors.right: parent.right
+                anchors.rightMargin: 15
 
                 onClicked: {
                     if(memberList.width == 0)
@@ -376,44 +532,17 @@ Rectangle {
                     color: parent.hovered ? "white" : (memberList.width == 200 ? "white" : Qt.rgba(0.8, 0.8, 0.8, 1.0))
                 }
             }
+        }
 
-            ToolButton {
-                id: settingsButton
-
-                width: 25
-                height: 25
-
-                anchors.verticalCenter: parent.verticalCenter
-
-                anchors.right: parent.right
-                anchors.rightMargin: 15
-
-                onClicked: stack.push("qrc:/Settings.qml")
-
-                ToolTip.visible: hovered
-                ToolTip.text: "Settings"
-
-                background: Rectangle { color: "transparent" }
-                contentItem: Rectangle { color: "transparent" }
-
-                Image {
-                    id: settingsButtonImage
-
-                    anchors.fill: parent
-
-                    sourceSize.width: parent.width
-                    sourceSize.height: parent.height
-
-                    source: "icons/settings.png"
-                }
-
-                ColorOverlay {
-                    anchors.fill: parent
-                    source: settingsButtonImage
-
-                    color: parent.hovered ? "white" : Qt.rgba(0.8, 0.8, 0.8, 1.0)
-                }
-            }
+        DropShadow {
+            anchors.fill: roomHeader
+            verticalOffset: 6
+            radius: 8.0
+            samples: 12
+            cached: true
+            source: roomHeader
+            opacity: 0.1
+            z: 4
         }
 
         Rectangle {
@@ -424,13 +553,23 @@ Rectangle {
 
             anchors.top: roomHeader.bottom
 
+            LinearGradient {
+                anchors.fill: parent
+                start: Qt.point(0, 0)
+                end: Qt.point(0, parent.height)
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: "#1f2029" }
+                    GradientStop { position: 1.0; color: "#1c1d24" }
+                }
+            }
+
             Rectangle {
                 height: parent.height - messageInputParent.height
                 width: parent.width
 
                 clip: true
 
-                color: Qt.rgba(0.1, 0.1, 0.1, 1.0)
+                color: "transparent"
 
                 ListView {
                     id: messages
@@ -440,9 +579,11 @@ Rectangle {
 
                     cacheBuffer: 200
 
+                    spacing: 3
+
                     delegate: Rectangle {                        
                         width: parent.width
-                        height: (condense ? 5 : 25) + messageArea.height
+                        height: (condense ? (nextCondense ? 2 : 12) : (nextCondense ? 23 : 35)) + messageArea.height
 
                         color: "transparent"
 
@@ -460,9 +601,9 @@ Rectangle {
                             cache: true
 
                             anchors.top: parent.top
-                            anchors.topMargin: 5
+                            anchors.topMargin: 13
                             anchors.left: parent.left
-                            anchors.leftMargin: 10
+                            anchors.leftMargin: 13
 
                             sourceSize.width: 33
                             sourceSize.height: 33
@@ -491,10 +632,12 @@ Rectangle {
 
                             text: condense ? "" : sender.displayName
 
-                            color: "gray"
+                            color: "white"
 
+                            anchors.top: parent.top
+                            anchors.topMargin: 5
                             anchors.left: avatar.right
-                            anchors.leftMargin: 20
+                            anchors.leftMargin: 17
 
                             textFormat: Text.PlainText
                         }
@@ -504,8 +647,12 @@ Rectangle {
 
                             color: "gray"
 
+                            font.pointSize: 9
+
+                            anchors.top: parent.top
+                            anchors.topMargin: 7
                             anchors.left: senderText.right
-                            anchors.leftMargin: 10
+                            anchors.leftMargin: 5
 
                             textFormat: Text.PlainText
                         }
@@ -513,7 +660,7 @@ Rectangle {
                         Rectangle {
                             id: messageArea
 
-                            y: condense ? 0 : 20
+                            y: condense ? 5 : 25
 
                             height: {
                                 if(display.msgType === "text")
@@ -527,7 +674,7 @@ Rectangle {
                             width: parent.width - (condense ? 63 : 20)
 
                             anchors.left: condense ? parent.left : avatar.right
-                            anchors.leftMargin: condense ? 63 : 20
+                            anchors.leftMargin: condense ? 63 : 17
 
                             color: "transparent"
 
@@ -544,7 +691,7 @@ Rectangle {
                                 readOnly: true
                                 selectByMouse: true
 
-                                color: display.sent ? "white" : "gray"
+                                color: display.sent ? Qt.rgba(0.8, 0.8, 0.8, 1.0) : "gray"
 
                                 visible: display.msgType === "text"
                             }
@@ -681,9 +828,21 @@ Rectangle {
 
                             anchors.fill: avatar
 
-                            acceptedButtons: Qt.RightButton
+                            cursorShape: Qt.PointingHandCursor
 
-                            onClicked: avatarMenu.popup()
+                            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                            onReleased: {
+                                if(mouse.button === Qt.RightButton) {
+                                    avatarMenu.popup()
+
+                                } else if(mouse.button === Qt.LeftButton) {
+                                    var popup = Qt.createComponent("qrc:/Profile.qml")
+                                    var popupContainer = popup.createObject(client, {"parent": client, "member": sender})
+
+                                    popupContainer.open()
+                                }
+                            }
                         }
 
                         Menu {
@@ -765,7 +924,7 @@ Rectangle {
                 width: parent.width
                 height: 55
 
-                color: Qt.rgba(0.1, 0.1, 0.1, 1.0)
+                color: "transparent"
 
                 ToolButton {
                     id: attachButton
@@ -878,7 +1037,7 @@ Rectangle {
             anchors.top: roomHeader.bottom
             anchors.left: messagesArea.right
 
-            color: Qt.rgba(0.15, 0.15, 0.15, 1.0)
+            color: "#28292f"
 
             width: matrix.currentRoom.direct ? 0 : 200
             height: parent.height - roomHeader.height

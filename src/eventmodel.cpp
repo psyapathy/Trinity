@@ -28,6 +28,12 @@ QVariant EventModel::data(const QModelIndex &index, int role) const {
 
         const Event* previousEvent = room->events[index.row() + 1];
         return previousEvent->getSender() == event->getSender();
+    } else if(role == NextCondenseRole) {
+        if(index.row() - 1 < 0)
+            return false;
+
+        const Event* previousEvent = room->events[index.row() - 1];
+        return previousEvent->getSender() == event->getSender();
     } else if(role == TimestampRole)
         return event->timestamp.toString(Qt::DefaultLocaleShortDate);
 
@@ -38,6 +44,7 @@ QHash<int, QByteArray> EventModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[Qt::DisplayRole] = "display";
     roles[CondenseRole] = "condense";
+    roles[NextCondenseRole] = "nextCondense";
     roles[TimestampRole] = "timestamp";
 
     return roles;

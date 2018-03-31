@@ -12,6 +12,7 @@ class EventModel : public QAbstractListModel
 public:
     enum EventRoles {
         CondenseRole = Qt::UserRole + 1,
+        NextCondenseRole,
         TimestampRole
     };
 

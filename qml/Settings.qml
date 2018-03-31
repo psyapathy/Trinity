@@ -19,11 +19,27 @@ Rectangle {
 
         color: "transparent"
 
-        Button {
+        BackButton {
             id: backButton
 
-            text: "Back"
-            onClicked: stack.pop()
+            anchors.top: parent.top
+            anchors.topMargin: 15
+
+            anchors.right: parent.right
+        }
+
+        Text {
+            id: directoryLabel
+
+            anchors.top: parent.top
+            anchors.topMargin: 15
+
+            text: "Settings"
+
+            font.pointSize: 25
+            font.bold: true
+
+            color: "white"
         }
 
         TabBar {
@@ -31,7 +47,7 @@ Rectangle {
 
             width: parent.width
 
-            anchors.top: backButton.bottom
+            anchors.top: directoryLabel.bottom
 
             TabButton {
                 text: "Account"

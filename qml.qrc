@@ -26,5 +26,12 @@
         <file alias="call.js">resources/call.js</file>
         <file alias="call.html">resources/call.html</file>
         <file alias="icons/trinity-idle.png">resources/icons/trinity-idle.png</file>
+        <file alias="icons/directory.png">resources/icons/directory.png</file>
+        <file alias="icons/communities.png">resources/icons/communities.png</file>
+        <file>qtquickcontrols2.conf</file>
+    </qresource>
+    <qresource prefix="/style">
+        <file alias="Menu.qml">qml/style/Menu.qml</file>
+        <file alias="MenuItem.qml">qml/style/MenuItem.qml</file>
     </qresource>
 </RCC>
