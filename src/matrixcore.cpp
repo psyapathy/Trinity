@@ -298,8 +298,10 @@ void MatrixCore::sync() {
             if(eventObject["type"].toString() == "m.direct") {
                 for(auto name : eventObject["content"].toObject().keys()) {
                     for(auto id : eventObject["content"].toObject()[name].toArray()) {
-                        idToRoom[id.toString()]->setDirect(true);
-                        idToRoom[id.toString()]->setName(name);
+                        if(idToRoom.contains(id.toString())) {
+                            idToRoom[id.toString()]->setDirect(true);
+                            idToRoom[id.toString()]->setName(name);
+                        }
                     }
                 }
             }
