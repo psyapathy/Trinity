@@ -9,31 +9,34 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS Core Quick Widgets WebEngine REQUIRED)
 
-add_executable(${PROJECT_NAME}
+set(TRINITY_SRCS
     src/main.cpp
-    qml.qrc
     src/eventmodel.cpp
-    include/eventmodel.h
     src/matrixcore.cpp
+    src/emotelistmodel.cpp
+    src/roomlistmodel.cpp
+    src/membermodel.cpp
+    src/communitylistmodel.cpp
+    src/roomlistsortmodel.cpp)
+
+set(TRINITY_HEADERS
+    include/eventmodel.h
     include/matrixcore.h
     include/network.h
     include/room.h
     include/roomlistmodel.h
-    src/roomlistmodel.cpp
     include/desktop.h
     include/membermodel.h
-    src/membermodel.cpp
     include/community.h
     include/communitylistmodel.h
-    src/communitylistmodel.cpp
-    src/roomlistsortmodel.cpp
     include/roomlistsortmodel.h
     include/emotelistmodel.h
-    src/emotelistmodel.cpp
     include/emote.h
     include/callobject.h)
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Quick Qt5::Widgets Qt5::WebEngine cmark)
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+add_executable(Trinity qml.qrc ${TRINITY_SRCS} ${TRINITY_HEADERS})
 
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+target_link_libraries(Trinity Qt5::Core Qt5::Quick Qt5::Widgets Qt5::WebEngine cmark)
+target_include_directories(Trinity PRIVATE include)
+
+install(TARGETS Trinity DESTINATION bin)
