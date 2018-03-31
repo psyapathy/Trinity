@@ -14,15 +14,9 @@ Item {
         width: 28
         height: 28
 
-        //onClicked: stack.push("qrc:/Directory.qml")
-
-        //hoverEnabled: true
-
         color: mouseArea.containsPress ? "#0037FD" : (mouseArea.containsMouse ? "#3486FD" : "#1e74fd")
 
         radius: 35
-
-        property bool down
 
         MouseArea {
             id: mouseArea

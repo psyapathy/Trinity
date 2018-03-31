@@ -836,13 +836,13 @@ Rectangle {
 
                 color: "transparent"
 
-                ToolButton {
+                BarButton {
                     id: attachButton
 
-                    icon.name: "mail-attachment"
+                    icon: "icons/add.png"
 
-                    width: 30
-                    height: 30
+                    width: 28
+                    height: 28
 
                     anchors.top: parent.top
                     anchors.topMargin: 5
@@ -859,8 +859,19 @@ Rectangle {
                 TextArea {
                     id: messageInput
 
-                    width: parent.width - attachButton.width - 10
+                    width: parent.width - 40
                     height: 30
+
+                    background: Rectangle {
+                        anchors.fill: parent
+
+                        color: "#282933"
+
+                        border.width: 2
+                        border.color: "#4D5063"
+
+                        radius: 5
+                    }
 
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 20
@@ -889,19 +900,20 @@ Rectangle {
                     }
                 }
 
-                ToolButton {
+                BarButton {
                     id: markdownButton
 
-                    icon.name: "text-x-generic"
+                    icon: "icons/markdown.png"
+                    iconColor: matrix.markdownEnabled ? "white" : "gray"
 
-                    width: 20
-                    height: 20
+                    width: 22
+                    height: 22
 
                     anchors.top: messageInput.top
-                    anchors.topMargin: 5
+                    anchors.topMargin: 3
 
                     anchors.right: emojiButton.left
-                    anchors.rightMargin: 5
+                    anchors.rightMargin: 3
 
                     ToolTip.text: "Markdown is " + (matrix.markdownEnabled ? "enabled" : "disabled")
                     ToolTip.visible: hovered
@@ -909,19 +921,20 @@ Rectangle {
                     onReleased: matrix.markdownEnabled = !matrix.markdownEnabled
                 }
 
-                ToolButton {
+                BarButton {
                     id: emojiButton
 
-                    icon.name: "face-smile"
+                    icon: "icons/smile.png"
+                    iconColor: "gray"
 
-                    width: 20
-                    height: 20
+                    width: 22
+                    height: 22
 
                     anchors.top: messageInput.top
-                    anchors.topMargin: 5
+                    anchors.topMargin: 3
 
                     anchors.right: messageInput.right
-                    anchors.rightMargin: 5
+                    anchors.rightMargin: 3
 
                     ToolTip.text: "Add emoji"
                     ToolTip.visible: hovered
