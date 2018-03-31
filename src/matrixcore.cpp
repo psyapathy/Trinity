@@ -426,6 +426,8 @@ void MatrixCore::sendMessage(Room* room, const QString& message) {
     room->events.push_front(e);
     eventModel.endUpdate();
 
+    eventModel.updateEvent(room->events[1]);
+
     unsentMessages.push_back(e);
 
     const auto onMessageFeedbackReceived = [this, e](QNetworkReply* reply) {
@@ -985,10 +987,7 @@ void MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
         Event* e = new Event(&room);
 
         e->timestamp = QDateTime(QDate::currentDate(),
-                                 QTime(QTime::currentTime().hour(),
-                                       QTime::currentTime().minute(),
-                                       QTime::currentTime().second(),
-            QTime::currentTime().msec() - event["unsigned"].toObject()["age"].toInt()));
+                                 QTime::currentTime().addMSecs(-event["unsigned"].toObject()["age"].toInt()));
 
         e->setSender(event["sender"].toString());
         e->eventId = event["event_id"].toString();
