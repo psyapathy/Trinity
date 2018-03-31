@@ -591,7 +591,7 @@ Rectangle {
                                     return preview.height
                             }
 
-                            width: parent.width - (condense ? 63 : 20)
+                            width: parent.width - (condense ? 103 : 63)
 
                             anchors.left: condense ? parent.left : avatar.right
                             anchors.leftMargin: condense ? 63 : 17
@@ -605,7 +605,7 @@ Rectangle {
 
                                 width: parent.width
 
-                                wrapMode: Text.Wrap
+                                wrapMode: Text.WordWrap
                                 textFormat: Text.RichText
 
                                 readOnly: true
