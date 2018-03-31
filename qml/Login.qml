@@ -101,6 +101,8 @@ Rectangle {
                     font.pointSize: 18
                     font.bold: true
 
+                    color: "white"
+
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.topMargin: 15
                 }
@@ -109,6 +111,8 @@ Rectangle {
                     id: usernameLabel
 
                     text: "Username"
+
+                    color: "white"
 
                     anchors.top: loginLabel.bottom
                     anchors.topMargin: 20
@@ -120,6 +124,8 @@ Rectangle {
                     width: parent.width
 
                     anchors.top: usernameLabel.bottom
+
+                    color: "white"
 
                     background: Rectangle {
                        color: Qt.rgba(0.1, 0.1, 0.1, 0.3)
@@ -136,6 +142,8 @@ Rectangle {
                     anchors.topMargin: 5
 
                     text: "Password"
+
+                    color: "white"
                 }
 
                 TextField {
@@ -144,6 +152,8 @@ Rectangle {
                     width: parent.width
 
                     anchors.top: passwordLabel.bottom
+
+                    color: "white"
 
                     echoMode: TextInput.Password
 
