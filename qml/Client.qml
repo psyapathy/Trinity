@@ -1100,9 +1100,20 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
 
-                        acceptedButtons: Qt.RightButton
+                        cursorShape: Qt.PointingHandCursor
 
-                        onClicked: memberContextMenu.popup()
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                        onReleased: {
+                            if(mouse.button === Qt.RightButton)
+                                memberContextMenu.popup()
+                            else if(mouse.button === Qt.LeftButton) {
+                                var popup = Qt.createComponent("qrc:/Profile.qml")
+                                var popupContainer = popup.createObject(client, {"parent": client, "member": matrix.resolveMemberId(id)})
+
+                                popupContainer.open()
+                            }
+                        }
                     }
 
                     Menu {

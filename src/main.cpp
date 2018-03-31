@@ -71,6 +71,13 @@ int main(int argc, char* argv[]) {
 
     QObject* root = component.create(context);
 
+    QObject::connect(trayIcon, &QSystemTrayIcon::activated, [root](QSystemTrayIcon::ActivationReason reason) {
+        QQuickWindow* window = qobject_cast<QQuickWindow*>(root);
+
+        if(reason == QSystemTrayIcon::ActivationReason::Trigger)
+            window->setVisible(!window->isVisible());
+    });
+
     QAction* openAction = new QAction("Open Trinity");
     QObject::connect(openAction, &QAction::triggered, [root] {
         QQuickWindow* window = qobject_cast<QQuickWindow*>(root);
