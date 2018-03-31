@@ -112,7 +112,7 @@ Rectangle {
 
                 property bool selected: channels.currentIndex === matrix.roomListModel.getOriginalIndex(index)
 
-                color: selected ? "white" : "transparent"
+                color: selected ? "white" : (mouseArea.containsMouse ? Qt.rgba(0.75, 0.75, 0.75, 1.0) : "transparent")
 
                 radius: 3
 
@@ -160,17 +160,20 @@ Rectangle {
                     anchors.left: roomAvatar.right
                     anchors.leftMargin: 5
 
-                    color: selected ? "black" : (highlightCount > 0 ? "red" : (notificationCount > 0 ? "blue" : "white"))
+                    color: selected || mouseArea.containsMouse ? "black" : (highlightCount > 0 ? "red" : (notificationCount > 0 ? "blue" : "white"))
 
                     textFormat: Text.PlainText
                 }
 
                 MouseArea {
+                    id: mouseArea
+
                     anchors.fill: parent
 
                     cursorShape: Qt.PointingHandCursor
 
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    hoverEnabled: true
 
                     onReleased: {
                         if(mouse.button == Qt.LeftButton) {
