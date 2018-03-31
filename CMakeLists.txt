@@ -17,7 +17,6 @@ add_executable(${PROJECT_NAME}
     src/matrixcore.cpp
     include/matrixcore.h
     include/network.h
-    include/requestsender.h
     include/room.h
     include/roomlistmodel.h
     src/roomlistmodel.cpp

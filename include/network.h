@@ -5,8 +5,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QUrl>
-
-#include "requestsender.h"
+#include <QNetworkReply>
 
 namespace network {
   extern QNetworkAccessManager* manager;
@@ -22,14 +21,11 @@ namespace network {
 
     request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(jsonPost.size()));
 
-    RequestSender* sender = new RequestSender(manager);
-    sender->fn = fn;
-
-    request.setOriginatingObject(sender);
-
-    QObject::connect(manager, &QNetworkAccessManager::finished, sender, &RequestSender::finished);
-
-    manager->post(request, jsonPost);
+    QNetworkReply* reply = manager->post(request, jsonPost);
+    reply->connect(reply, &QNetworkReply::finished, [reply, fn] {
+        fn(reply);
+        reply->deleteLater();
+    });
   }
 
   template<typename Fn, typename ProgressFn>
@@ -40,14 +36,11 @@ namespace network {
 
     request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(data.size()));
 
-    RequestSender* sender = new RequestSender(manager);
-    sender->fn = fn;
-
-    request.setOriginatingObject(sender);
-
-    QObject::connect(manager, &QNetworkAccessManager::finished, sender, &RequestSender::finished);
-
     QNetworkReply* reply = manager->post(request, data);
+    reply->connect(reply, &QNetworkReply::finished, [reply, fn] {
+        fn(reply);
+        reply->deleteLater();
+    });
     QObject::connect(reply, &QNetworkReply::uploadProgress, progressFn);
   }
 
@@ -55,13 +48,6 @@ namespace network {
   inline void post(const QString& path, Fn&& fn) {
     QNetworkRequest request(homeserverURL + path);
     request.setRawHeader("Authorization", accessToken.toLocal8Bit());
-
-    RequestSender* sender = new RequestSender(manager);
-    sender->fn = fn;
-
-    request.setOriginatingObject(sender);
-
-    QObject::connect(manager, &QNetworkAccessManager::finished, sender, &RequestSender::finished);
 
     manager->post(request, QByteArray());
   }
@@ -91,18 +77,14 @@ namespace network {
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", accessToken.toLocal8Bit());
 
-    RequestSender* sender = new RequestSender(manager);
-    sender->fn = fn;
-
-    request.setOriginatingObject(sender);
-
     const QByteArray jsonPost = QJsonDocument(object).toJson();
-
     request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(jsonPost.size()));
 
-    QObject::connect(manager, &QNetworkAccessManager::finished, sender, &RequestSender::finished);
-
-    manager->put(request, jsonPost);
+    QNetworkReply* reply = manager->put(request, jsonPost);
+    reply->connect(reply, &QNetworkReply::finished, [reply, fn] {
+        fn(reply);
+        reply->deleteLater();
+    });
   }
 
   template<typename Fn>
@@ -111,13 +93,10 @@ namespace network {
     request.setHeader(QNetworkRequest::ContentTypeHeader, contentType);
     request.setRawHeader("Authorization", accessToken.toLocal8Bit());
 
-    RequestSender* sender = new RequestSender(manager);
-    sender->fn = fn;
-
-    request.setOriginatingObject(sender);
-
-    QObject::connect(manager, &QNetworkAccessManager::finished, sender, &RequestSender::finished);
-
-    manager->get(request);
+    QNetworkReply* reply = manager->get(request);
+    reply->connect(reply, &QNetworkReply::finished, [reply, fn] {
+        fn(reply);
+        reply->deleteLater();
+    });
   }
 }
