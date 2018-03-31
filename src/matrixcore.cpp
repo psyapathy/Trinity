@@ -411,7 +411,7 @@ void MatrixCore::sync() {
                             Member* member = resolveMemberId(userId);
 
                             if(member) {
-                                Event* event = member->acknowledgement;
+                                Event* event = member->acknowledgements[roomState];
                                 if(event) {
                                     event->removeAcknowledgement(userId);
 
@@ -422,7 +422,7 @@ void MatrixCore::sync() {
                             Event* newEvent = findEvent(roomState, eventId);
                             if(newEvent) {
                                 if(member)
-                                    member->acknowledgement = newEvent;
+                                    member->acknowledgements[roomState] = newEvent;
 
                                 newEvent->addAcknowledgement(userId);
 

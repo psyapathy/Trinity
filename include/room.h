@@ -144,6 +144,8 @@ signals:
     void acknowledgementsChanged();
 };
 
+class Room;
+
 class Member : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString id READ getId NOTIFY idChanged)
@@ -197,7 +199,7 @@ public:
         return list;
     }
 
-    Event* acknowledgement = nullptr;
+    QMap<Room*, Event*> acknowledgements;
 
 signals:
     void idChanged();

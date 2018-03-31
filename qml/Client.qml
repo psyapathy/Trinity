@@ -805,7 +805,7 @@ Rectangle {
                                         return "placeholder.png"
                                 }
 
-                                x: parent.width - (index * 18) - 5
+                                x: parent.width - (index * 18)
                                 y: parent.height - 15
 
                                 width: 15
