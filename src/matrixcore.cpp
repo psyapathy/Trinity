@@ -293,6 +293,18 @@ void MatrixCore::sync() {
             }
         }
 
+        for(const auto event : document.object()["account_data"].toObject()["events"].toArray()) {
+            const QJsonObject eventObject = event.toObject();
+            if(eventObject["type"].toString() == "m.direct") {
+                for(auto name : eventObject["content"].toObject().keys()) {
+                    for(auto id : eventObject["content"].toObject()[name].toArray()) {
+                        idToRoom[id.toString()]->setDirect(true);
+                        idToRoom[id.toString()]->setName(name);
+                    }
+                }
+            }
+        }
+
         unsigned int i = 0;
         for(const auto& room : document.object()["rooms"].toObject()["join"].toObject()) {
             Room* roomState = nullptr;
