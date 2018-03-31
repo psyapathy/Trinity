@@ -54,11 +54,19 @@ Rectangle {
 
             clip: true
 
+            ScrollBar.vertical: ScrollBar {}
+
+            boundsBehavior: Flickable.StopAtBounds
+
+            spacing: 5
+
             delegate: Rectangle {
                 width: parent.width
                 height: 40 + roomTopic.contentHeight
 
-                color: "transparent"
+                color: mouseArea.containsPress ? "black" : (mouseArea.containsMouse ? "gray" : "transparent")
+
+                radius: 5
 
                 Image {
                     id: roomAvatar
@@ -121,6 +129,10 @@ Rectangle {
                 }
 
                 MouseArea {
+                    id: mouseArea
+
+                    hoverEnabled: true
+
                     anchors.fill: parent
 
                     onClicked: {
