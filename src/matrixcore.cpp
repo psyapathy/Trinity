@@ -367,6 +367,9 @@ void MatrixCore::sync() {
                 roomListModel.updateRoom(roomState);
             }
 
+            for(const auto event : room.toObject()["timeline"].toObject()["events"].toArray())
+                consumeEvent(event.toObject(), *roomState);
+
             for(const auto event : room.toObject()["ephemeral"].toObject()["events"].toArray()) {
                 const QString eventType = event.toObject()["type"].toString();
 
@@ -402,11 +405,35 @@ void MatrixCore::sync() {
                         this->typingText.clear();
 
                     emit typingTextChanged();
+                } else if(eventType == "m.receipt") {
+                    for(const auto eventId : event.toObject()["content"].toObject().keys()) {
+                        for(const auto userId : event.toObject()["content"].toObject()[eventId].toObject()["m.read"].toObject().keys()) {
+                            Member* member = resolveMemberId(userId);
+
+                            if(member) {
+                                Event* event = member->acknowledgement;
+                                if(event) {
+                                    event->removeAcknowledgement(userId);
+
+                                    eventModel.updateEvent(event);
+                                }
+                            }
+
+                            Event* newEvent = findEvent(roomState, eventId);
+                            if(newEvent) {
+                                if(member)
+                                    member->acknowledgement = newEvent;
+
+                                newEvent->addAcknowledgement(userId);
+
+                                eventModel.updateEvent(newEvent);
+                            }
+                        }
+                    }
+                } else {
+                    qDebug() << "unhandled ephemeral event type " << eventType;
                 }
             }
-
-            for(const auto event : room.toObject()["timeline"].toObject()["events"].toArray())
-                consumeEvent(event.toObject(), *roomState);
 
             i++;
         }
@@ -810,8 +837,6 @@ void MatrixCore::changeCurrentRoom(const unsigned int index) {
 }
 
 void MatrixCore::addEmote(const QString& url) {
-    qDebug() << "adding emote " << url;
-
     QString newUrl = url;
     newUrl.remove("file://");
 
@@ -1017,8 +1042,12 @@ bool MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
             emit callInvite(&room, event["sender"].toString(), event);
 
         return false;
-    } else
+    } else if(eventType == "m.room.redaction") {
         return false;
+    } else {
+        qDebug() << "unhandled event type " << eventType;
+        return false;
+    }
 
     // don't show redacted messages
     if(event["unsigned"].toObject().keys().contains("redacted_because"))
@@ -1057,8 +1086,10 @@ bool MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
             e->setAttachment(getMXCMediaURL(event["content"].toObject()["url"].toString()));
             e->setAttachmentSize(event["content"].toObject()["info"].toObject()["size"].toInt());
             e->setMsg(event["content"].toObject()["body"].toString());
-        } else
+        } else {
             e->setMsg(event["content"].toObject()["body"].toString());
+            qDebug() << "unhandled message type " << msgType;
+        }
 
         QString msg = e->getMsg();
         for(const auto& emote : emotes) {
@@ -1115,6 +1146,15 @@ QString MatrixCore::getMXCMediaURL(QString url) {
 
 QString MatrixCore::getDisplayName() const {
     return displayName;
+}
+
+Event* MatrixCore::findEvent(Room* room, const QString &id) const {
+    for(auto event : room->events) {
+        if(event->eventId == id)
+            return event;
+    }
+
+    return nullptr;
 }
 
 QVariantList MatrixCore::getJoinedCommunitiesList() const {

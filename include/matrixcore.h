@@ -144,6 +144,8 @@ private:
 
     QString getDisplayName() const;
 
+    Event* findEvent(Room* room, const QString& id) const;
+
     QList<Room*> rooms;
     Room emptyRoom;
 

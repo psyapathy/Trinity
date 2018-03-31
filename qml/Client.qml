@@ -738,6 +738,18 @@ Rectangle {
 
                                 onReleased: messageInput.append("> " + msg + "\n\n")
                             }
+
+                            MenuItem {
+                                text: "Acknowledgements"
+
+                                onReleased: {
+                                    var str = ""
+                                    for(var i = 0; i < display.acknowledgements.length; i++)
+                                        str += matrix.resolveMemberId(display.acknowledgements[i]).displayName + "\n"
+
+                                    showDialog("List of members who read this event:", str)
+                                }
+                            }
                         }
 
                         MouseArea {
@@ -773,6 +785,48 @@ Rectangle {
                                     var popupContainer = popup.createObject(client, {"parent": client, "member": sender})
 
                                     popupContainer.open()
+                                }
+                            }
+                        }
+
+                        Repeater {
+                            id: readRepeater
+
+                            model: display.acknowledgements
+
+                            Image {
+                                id: readAvatar
+
+                                source: {
+                                    var member = matrix.resolveMemberId(display.acknowledgements[index])
+                                    if(member && member.avatarURL)
+                                        return member.avatarURL
+                                    else
+                                        return "placeholder.png"
+                                }
+
+                                x: parent.width - (index * 18) - 5
+                                y: parent.height - 15
+
+                                width: 15
+                                height: 15
+
+                                visible: index < 5
+
+                                onStatusChanged: if(status == Image.Error || status == Image.Null) source = "placeholder.png"
+
+                                layer.enabled: true
+                                layer.effect: OpacityMask {
+                                    maskSource: Item {
+                                        width: readAvatar.width
+                                        height: readAvatar.height
+                                        Rectangle {
+                                            anchors.centerIn: parent
+                                            width: readAvatar.width
+                                            height: readAvatar.height
+                                            radius: Math.min(width, height)
+                                        }
+                                    }
                                 }
                             }
                         }

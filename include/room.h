@@ -19,6 +19,7 @@ class Event : public QObject
     Q_PROPERTY(bool sent READ getSent NOTIFY sentChanged)
     Q_PROPERTY(double sentProgress READ getSentProgress NOTIFY sentProgressChanged)
     Q_PROPERTY(QString eventId MEMBER eventId NOTIFY eventIdChanged)
+    Q_PROPERTY(QVariantList acknowledgements READ getAcknowledgements NOTIFY acknowledgementsChanged)
 public:
     Event(QObject* parent = nullptr) : QObject(parent) {}
 
@@ -66,6 +67,18 @@ public:
         emit sentProgressChanged();
     }
 
+    void addAcknowledgement(const QString acknowledgement) {
+        acknowledgements.push_back(acknowledgement);
+        emit acknowledgementsChanged();
+    }
+
+    void removeAcknowledgement(const QString acknowledgement) {
+        if(acknowledgements.contains(acknowledgement)) {
+            acknowledgements.removeOne(acknowledgement);
+            emit acknowledgementsChanged();
+        }
+    }
+
     QString getSender() const {
         return sender;
     }
@@ -102,6 +115,10 @@ public:
         return sentProgress;
     }
 
+    QVariantList getAcknowledgements() const {
+        return acknowledgements;
+    }
+
     QString eventId;
     QDateTime timestamp;
 
@@ -112,6 +129,7 @@ private:
     int attachmentSize;
     bool sent = true;
     double sentProgress = 0.0;
+    QVariantList acknowledgements;
 
 signals:
     void senderChanged();
@@ -123,6 +141,7 @@ signals:
     void sentChanged();
     void sentProgressChanged();
     void eventIdChanged();
+    void acknowledgementsChanged();
 };
 
 class Member : public QObject {
@@ -177,6 +196,8 @@ public:
 
         return list;
     }
+
+    Event* acknowledgement = nullptr;
 
 signals:
     void idChanged();
