@@ -50,8 +50,8 @@ MatrixCore::MatrixCore(QObject* parent) : QObject(parent), roomListModel(rooms),
             // TODO: add support for more than just .png emotes
             if(emote.fileName().contains(".png")) {
                 Emote* e = new Emote();
-                e->name = emote.fileName().remove(".png");
-                e->path = emote.absoluteFilePath();
+                e->setName(emote.fileName().remove(".png"));
+                e->setPath(emote.absoluteFilePath());
 
                 emotes.push_back(e);
             }
@@ -149,6 +149,15 @@ void MatrixCore::logout() {
     settings.remove("deviceId");
     settings.remove("userId");
     settings.sync();
+
+    for(auto member : idToMember)
+        member->deleteLater();
+
+    for(auto community : idToCommunity)
+        community->deleteLater();
+
+    for(auto room : idToRoom)
+        room->deleteLater();
 
     rooms.clear();
     nextBatch.clear();
@@ -442,7 +451,7 @@ void MatrixCore::sendMessage(Room* room, const QString& message) {
 
     QString msg = e->getMsg();
     for(const auto& emote : emotes) {
-        msg.replace(":" + emote->name + ":", "<img src='file://" + emote->path + "' width=22 height=22/>");
+        msg.replace(":" + emote->getName() + ":", "<img src='file://" + emote->getPath() + "' width=22 height=22/>");
     }
     e->setMsg(msg);
 
@@ -814,8 +823,8 @@ void MatrixCore::addEmote(const QString& url) {
     pixmap.save(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/emotes/" + file.fileName());
 
     Emote* emote = new Emote();
-    emote->path = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/emotes/" + file.fileName();
-    emote->name = file.fileName().remove(".png");
+    emote->setPath(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/emotes/" + file.fileName());
+    emote->setName(file.fileName().remove(".png"));
 
     emotes.push_back(emote);
 
@@ -826,7 +835,7 @@ void MatrixCore::addEmote(const QString& url) {
 void MatrixCore::deleteEmote(Emote* emote) {
     emotes.removeOne(emote);
 
-    QFile(emote->path).remove();
+    QFile(emote->getPath()).remove();
 
     emit localEmotesChanged();
     localEmoteModel.update();
@@ -1046,7 +1055,7 @@ void MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
 
         QString msg = e->getMsg();
         for(const auto& emote : emotes) {
-            msg.replace(":" + emote->name + ":", "<img src='file://" + emote->path + "' width=22 height=22/>");
+            msg.replace(":" + emote->getName() + ":", "<img src='file://" + emote->getPath() + "' width=22 height=22/>");
         }
 
         e->setMsg(msg);
