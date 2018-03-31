@@ -271,121 +271,31 @@ Rectangle {
            }
         }
 
-        ToolButton {
-            id: directoryButton
-
-            width: 28
-            height: 28
-
+        IconButton {
             x: 35
             y: parent.height - 50
 
-            onClicked: stack.push("qrc:/Directory.qml")
+            icon: "icons/directory.png"
 
-            background: Rectangle {
-                color: "#1e74fd"
-
-                radius: 35
-            }
-
-            Image {
-                id: directoryButtonImage
-
-                anchors.centerIn: parent
-
-                width: 23
-                height: 23
-
-                sourceSize.width: width
-                sourceSize.height: height
-
-                source: "icons/directory.png"
-            }
-
-            ColorOverlay {
-                anchors.fill: directoryButtonImage
-                source: directoryButtonImage
-
-                color: "white"
-            }
+            onReleased: stack.push("qrc:/Directory.qml")
         }
 
-        ToolButton {
-            id: communitiesButton
-
-            width: 28
-            height: 28
-
+        IconButton {
             x: 81
             y: parent.height - 50
 
-            onClicked: stack.push("qrc:/Communities.qml")
+            icon: "icons/communities.png"
 
-            background: Rectangle {
-                color: "#1e74fd"
-
-                radius: 35
-            }
-
-            Image {
-                id: communitiesButtonImage
-
-                anchors.centerIn: parent
-
-                width: 21
-                height: 21
-
-                sourceSize.width: width
-                sourceSize.height: height
-
-                source: "icons/communities.png"
-            }
-
-            ColorOverlay {
-                anchors.fill: communitiesButtonImage
-                source: communitiesButtonImage
-
-                color: "white"
-            }
+            onReleased: stack.push("qrc:/Communities.qml")
         }
 
-        ToolButton {
-            id: settingsButton
-
-            width: 28
-            height: 28
-
+        IconButton {
             x: 125
             y: parent.height - 50
 
-            onClicked: stack.push("qrc:/Settings.qml")
+            icon: "icons/settings.png"
 
-            background: Rectangle {
-                color: "#1e74fd"
-
-                radius: 35
-            }
-
-            Image {
-                id: settingsButtonImage
-
-                anchors.centerIn: parent
-
-                width: 22
-                height: 22
-
-                sourceSize.width: width
-                sourceSize.height: height
-
-                source: "icons/settings.png"
-            }
-
-            ColorOverlay {
-                anchors.fill: settingsButtonImage
-                source: settingsButtonImage
-
-                color: "white"
-            }
+            onReleased: stack.push("qrc:/Settings.qml")
         }
     }
 
