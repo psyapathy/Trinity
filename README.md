@@ -35,8 +35,8 @@ Event Context|No|
 Direct Messaging|Yes|
 
 ## Screenshots
-
-![Screenshot](https://raw.githubusercontent.com/invghost/Trinity/master/misc/screenshot.png)
+![Login page](https://raw.githubusercontent.com/invghost/Trinity/master/misc/screenshot2.png)
+![Client](https://raw.githubusercontent.com/invghost/Trinity/master/misc/screenshot.png)
 
 ## Dependencies
 * Qt5
