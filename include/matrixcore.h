@@ -59,7 +59,7 @@ public:
     Q_INVOKABLE void inviteToRoom(Room* room, const QString& userId);
 
     Q_INVOKABLE void updateMembers(Room* room);
-    Q_INVOKABLE void readMessageHistory(Room* room);
+    Q_INVOKABLE void readMessageHistory(Room* room, const int number = 10);
 
     // member
     Q_INVOKABLE void updateMemberCommunities(Member* member);
@@ -136,7 +136,7 @@ signals:
     void callInvite(Room* room, QString from, QJsonObject event);
 
 private:
-    void consumeEvent(const QJsonObject& event, Room& room, const bool insertFront = true);
+    bool consumeEvent(const QJsonObject& event, Room& room, const bool insertFront = true);
     Community* createCommunity(const QString& id);
 
     QString getMXCThumbnailURL(QString url);

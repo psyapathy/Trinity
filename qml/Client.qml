@@ -10,6 +10,11 @@ Rectangle {
 
     property bool shouldScroll: false
 
+    property var checkShouldReadHistory: function() {
+        if(messages.contentY < messages.originY + 5 || messages.contentHeight < messages.parent.height)
+            matrix.readMessageHistory(matrix.currentRoom, (messages.parent.height) / 25)
+    }
+
     Rectangle {
         id: sidebar
 
@@ -483,6 +488,8 @@ Rectangle {
                 clip: true
 
                 color: "transparent"
+
+                onHeightChanged: checkShouldReadHistory()
 
                 ListView {
                     id: messages
@@ -1150,10 +1157,7 @@ Rectangle {
 
         onInitialSyncFinished: matrix.changeCurrentRoom(0)
 
-        onCurrentRoomChanged: {
-            if(messages.contentY < messages.originY + 5)
-                matrix.readMessageHistory(matrix.currentRoom)
-        }
+        onCurrentRoomChanged: checkShouldReadHistory()
 
         onMessage: {
             var notificationLevel = room.notificationLevel

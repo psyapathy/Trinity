@@ -690,21 +690,28 @@ void MatrixCore::updateMembers(Room* room) {
     });
 }
 
-void MatrixCore::readMessageHistory(Room* room) {
+void MatrixCore::readMessageHistory(Room* room, const int number) {
     if(!room || room->prevBatch.isEmpty())
         return;
 
-    network::get("/_matrix/client/r0/rooms/" + room->getId() + "/messages?from=" + room->prevBatch + "&dir=b", [this, room](QNetworkReply* reply) {
+    network::get("/_matrix/client/r0/rooms/" + room->getId() + "/messages?from=" + room->prevBatch + "&dir=b&limit=" + QString::number(number), [this, room, number](QNetworkReply* reply) {
         const QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
 
         room->prevBatch = document.object()["end"].toString();
 
         traversingHistory = true;
 
-        for(const auto event : document.object()["chunk"].toArray())
-            consumeEvent(event.toObject(), *room, false);
+        int num = 0;
+
+        for(const auto event : document.object()["chunk"].toArray()) {
+            if(consumeEvent(event.toObject(), *room, false))
+                num++;
+        }
 
         traversingHistory = false;
+
+        if(num < number)
+            readMessageHistory(room, number - num);
     });
 }
 
@@ -951,7 +958,7 @@ QString MatrixCore::getHomeserverURL() const {
     return homeserverURL;
 }
 
-void MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool insertFront) {
+bool MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool insertFront) {
     const QString eventType = event["type"].toString();
 
     const auto addEvent = [&room, insertFront, this](Event* object) {
@@ -990,7 +997,7 @@ void MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
     } else if(eventType == "m.room.member") {
         // avoid events tied to us
         if(event["state_key"].toString() == userId)
-            return;
+            return false;
 
         if(event["content"].toObject().contains("is_direct"))
             room.setDirect(event["content"].toObject()["is_direct"].toBool());
@@ -1009,13 +1016,13 @@ void MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
         if(event["content"].toObject()["lifetime"].toInt() > event["unsigned"].toObject()["age"].toInt())
             emit callInvite(&room, event["sender"].toString(), event);
 
-        return;
+        return false;
     } else
-        return;
+        return false;
 
     // don't show redacted messages
     if(event["unsigned"].toObject().keys().contains("redacted_because"))
-        return;
+        return false;
 
     if(!found && eventType == "m.room.message") {
         const QString msgType = event["content"].toObject()["msgtype"].toString();
@@ -1064,7 +1071,11 @@ void MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
 
         if(!firstSync && !traversingHistory)
             emit message(&room, e->getSender(), e->getMsg());
+
+        return true;
     }
+
+    return false;
 }
 
 Community* MatrixCore::createCommunity(const QString& id) {
