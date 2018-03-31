@@ -21,9 +21,9 @@
         <file alias="CallDialog.qml">qml/CallDialog.qml</file>
         <file alias="IconButton.qml">qml/IconButton.qml</file>
         <file alias="BarButton.qml">qml/BarButton.qml</file>
-        <file alias="call.js">resources/call.js</file>
-        <file alias="call.html">resources/call.html</file>
-        <file>qtquickcontrols2.conf</file>
+        <file alias="call.js">resources/web/call.js</file>
+        <file alias="call.html">resources/web/call.html</file>
+        <file alias="qtquickcontrols2.conf">resources/qtquickcontrols2.conf</file>
     </qresource>
     <qresource prefix="/icons">
       <file alias="settings.png">resources/icons/settings.png</file>
