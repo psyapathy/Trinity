@@ -19,14 +19,7 @@ Rectangle {
 
         color: "transparent"
 
-        BackButton {
-            id: backButton
-
-            anchors.top: parent.top
-            anchors.topMargin: 15
-
-            anchors.right: parent.right
-        }
+        BackButton {}
 
         Text {
             id: directoryLabel
@@ -48,6 +41,7 @@ Rectangle {
             width: parent.width
 
             anchors.top: directoryLabel.bottom
+            anchors.topMargin: 10
 
             TabButton {
                 text: "Account"

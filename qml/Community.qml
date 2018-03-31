@@ -18,19 +18,12 @@ Rectangle {
 
         color: "transparent"
 
-        BackButton {
-            id: backButton
-
-            anchors.top: parent.top
-            anchors.topMargin: 15
-
-            anchors.right: parent.right
-        }
+        BackButton {}
 
         Image {
             id: communityAvatar
 
-            anchors.top: backButton.bottom
+            anchors.top: parent.top
             anchors.topMargin: 15
 
             width: 64

@@ -16,14 +16,7 @@ Rectangle {
 
         color: "transparent"
 
-        BackButton {
-            id: backButton
-
-            anchors.top: parent.top
-            anchors.topMargin: 15
-
-            anchors.right: parent.right
-        }
+        BackButton {}
 
         Rectangle {
             width: 200

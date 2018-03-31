@@ -20,14 +20,7 @@ Rectangle {
 
         color: "transparent"
 
-        BackButton {
-            id: backButton
-
-            anchors.top: parent.top
-            anchors.topMargin: 15
-
-            anchors.right: parent.right
-        }
+        BackButton {}
 
         Text {
             id: directoryLabel
@@ -45,7 +38,7 @@ Rectangle {
 
         ListView {
             width: parent.width
-            height: parent.height - backButton.height
+            height: parent.height
 
             anchors.top: directoryLabel.bottom
             anchors.topMargin: 10
@@ -133,11 +126,15 @@ Rectangle {
 
                     hoverEnabled: true
 
+                    cursorShape: Qt.PointingHandCursor
+
                     anchors.fill: parent
 
-                    onClicked: {
-                        matrix.joinRoom(id)
-                        stack.pop()
+                    onReleased: {
+                        if(containsMouse) {
+                            matrix.joinRoom(id)
+                            stack.pop()
+                        }
                     }
                 }
             }

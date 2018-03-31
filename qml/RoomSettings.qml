@@ -18,14 +18,7 @@ Rectangle {
 
         color: "transparent"
 
-        BackButton {
-            id: backButton
-
-            anchors.top: parent.top
-            anchors.topMargin: 15
-
-            anchors.right: parent.right
-        }
+        BackButton {}
 
         Text {
             id: roomNameLabel
@@ -45,6 +38,7 @@ Rectangle {
             id: bar
 
             anchors.top: roomNameLabel.bottom
+            anchors.topMargin: 10
 
             TabButton {
                 text: "Overview"

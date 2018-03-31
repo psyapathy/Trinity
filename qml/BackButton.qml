@@ -4,21 +4,47 @@ import QtGraphicalEffects 1.0
 import QtQuick.Shapes 1.0
 
 Rectangle {
-    color: "transparent"
+    id: button
 
-    ToolButton {
-        id: button
+    anchors.top: parent.top
+    anchors.topMargin: 15
 
-        width: 32
-        height: 32
+    anchors.right: parent.right
 
+    width: 32
+    height: 32
+
+    color: mouseArea.containsPress ? "black" : (mouseArea.containsMouse ? "gray" : "transparent")
+
+    radius: 32
+
+    border.width: 2
+    border.color: "gray"
+
+    MouseArea {
+        id: mouseArea
+
+        anchors.fill: parent
+
+        hoverEnabled: true
+
+        cursorShape: Qt.PointingHandCursor
+
+        onReleased: if(containsMouse) stack.pop()
+    }
+
+    Text {
         text: "X"
 
-        onClicked: stack.pop()
+        color: "white"
+
+        anchors.centerIn: parent
     }
 
     Text {
         anchors.top: button.bottom
+        anchors.topMargin: 3
+
         anchors.horizontalCenter: button.horizontalCenter
 
         horizontalAlignment: Text.AlignHCenter
