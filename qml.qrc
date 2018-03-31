@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="Client.qml">qml/Client.qml</file>
         <file alias="main.qml">qml/main.qml</file>
+        <file alias="Client.qml">qml/Client.qml</file>
         <file alias="Login.qml">qml/Login.qml</file>
         <file alias="Dialog.qml">qml/Dialog.qml</file>
         <file alias="ServerSelection.qml">qml/ServerSelection.qml</file>
@@ -17,23 +17,25 @@
         <file alias="background.jpg">resources/background.jpg</file>
         <file alias="matrix-logo.png">resources/matrix-logo.png</file>
         <file alias="placeholder.png">resources/placeholder.png</file>
-        <file alias="icons/settings.png">resources/icons/settings.png</file>
-        <file alias="icons/memberlist.png">resources/icons/memberlist.png</file>
-        <file alias="icons/download.png">resources/icons/download.png</file>
-        <file alias="icons/call.png">resources/icons/call.png</file>
         <file alias="ImageViewer.qml">qml/ImageViewer.qml</file>
         <file alias="CallDialog.qml">qml/CallDialog.qml</file>
         <file alias="IconButton.qml">qml/IconButton.qml</file>
         <file alias="BarButton.qml">qml/BarButton.qml</file>
         <file alias="call.js">resources/call.js</file>
         <file alias="call.html">resources/call.html</file>
-        <file alias="icons/trinity-idle.png">resources/icons/trinity-idle.png</file>
-        <file alias="icons/directory.png">resources/icons/directory.png</file>
-        <file alias="icons/communities.png">resources/icons/communities.png</file>
-        <file alias="icons/add.png">resources/icons/add.png</file>
-        <file alias="icons/markdown.png">resources/icons/markdown.png</file>
-        <file alias="icons/smile.png">resources/icons/smile.png</file>
         <file>qtquickcontrols2.conf</file>
+    </qresource>
+    <qresource prefix="/icons">
+      <file alias="settings.png">resources/icons/settings.png</file>
+      <file alias="memberlist.png">resources/icons/memberlist.png</file>
+      <file alias="download.png">resources/icons/download.png</file>
+      <file alias="call.png">resources/icons/call.png</file>
+      <file alias="trinity-idle.png">resources/icons/trinity-idle.png</file>
+      <file alias="directory.png">resources/icons/directory.png</file>
+      <file alias="communities.png">resources/icons/communities.png</file>
+      <file alias="add.png">resources/icons/add.png</file>
+      <file alias="markdown.png">resources/icons/markdown.png</file>
+      <file alias="smile.png">resources/icons/smile.png</file>
     </qresource>
     <qresource prefix="/style">
         <file alias="Menu.qml">qml/style/Menu.qml</file>
