@@ -1086,7 +1086,11 @@ bool MatrixCore::consumeEvent(const QJsonObject& event, Room& room, const bool i
             e->setAttachment(getMXCMediaURL(event["content"].toObject()["url"].toString()));
             e->setAttachmentSize(event["content"].toObject()["info"].toObject()["size"].toInt());
             e->setMsg(event["content"].toObject()["body"].toString());
+        } else if(msgType == "m.emote") {
+            e->setMsgType("text");
+            e->setMsg("<i>" + e->getSender() + " " + event["content"].toObject()["body"].toString() + "</i>");
         } else {
+            e->setMsgType("text");
             e->setMsg(event["content"].toObject()["body"].toString());
             qDebug() << "unhandled message type " << msgType;
         }
