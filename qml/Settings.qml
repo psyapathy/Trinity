@@ -173,18 +173,70 @@ Rectangle {
                 id: appearanceTab
 
                 Column {
-                    CheckBox {
-                        text: "Show typing notifications"
+                    Column {
+                        Text {
+                            text: "Theme"
 
-                        checked: settings.showTypingNotifications
-                        onCheckedChanged: settings.showTypingNotifications = checked
+                            color: "white"
+                        }
+
+                        Text {
+                            text: "Accent Color"
+
+                            color: "white"
+
+                            font.pointSize: 10
+                        }
+
+                        Row {
+                            ColorCell {
+                                color: "#1e74fd"
+                            }
+
+                            ColorCell {
+                                color: "#6E42E8"
+                            }
+
+                            ColorCell {
+                                color: "#FF2DEA"
+                            }
+
+                            ColorCell {
+                                color: "#E73E1E"
+                            }
+
+                            ColorCell {
+                                color: "#FFA320"
+                            }
+
+                            Button {
+                                text: "Custom..."
+
+                                onReleased: colorDialog.open()
+                            }
+                        }
                     }
 
-                    CheckBox {
-                        text: "Show read acknowledgements"
+                    Column {
+                        Text {
+                            text: "Other"
 
-                        checked: settings.showReadAcknowledgements
-                        onCheckedChanged: settings.showReadAcknowledgements = checked
+                            color: "white"
+                        }
+
+                        CheckBox {
+                            text: "Show typing notifications"
+
+                            checked: settings.showTypingNotifications
+                            onCheckedChanged: settings.showTypingNotifications = checked
+                        }
+
+                        CheckBox {
+                            text: "Show read acknowledgements"
+
+                            checked: settings.showReadAcknowledgements
+                            onCheckedChanged: settings.showReadAcknowledgements = checked
+                        }
                     }
                 }
             }
@@ -298,4 +350,11 @@ Rectangle {
 
         onRejected: close()
     }
+
+    ColorDialog {
+        id: colorDialog
+
+        onAccepted: settings.accentColor = color
+    }
 }
+

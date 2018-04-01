@@ -21,21 +21,22 @@
         <file alias="CallDialog.qml">qml/CallDialog.qml</file>
         <file alias="IconButton.qml">qml/IconButton.qml</file>
         <file alias="BarButton.qml">qml/BarButton.qml</file>
+        <file alias="ColorCell.qml">qml/ColorCell.qml</file>
         <file alias="call.js">resources/web/call.js</file>
         <file alias="call.html">resources/web/call.html</file>
         <file alias="qtquickcontrols2.conf">resources/qtquickcontrols2.conf</file>
     </qresource>
     <qresource prefix="/icons">
-      <file alias="settings.png">resources/icons/settings.png</file>
-      <file alias="memberlist.png">resources/icons/memberlist.png</file>
-      <file alias="download.png">resources/icons/download.png</file>
-      <file alias="call.png">resources/icons/call.png</file>
-      <file alias="trinity-idle.png">resources/icons/trinity-idle.png</file>
-      <file alias="directory.png">resources/icons/directory.png</file>
-      <file alias="communities.png">resources/icons/communities.png</file>
-      <file alias="add.png">resources/icons/add.png</file>
-      <file alias="markdown.png">resources/icons/markdown.png</file>
-      <file alias="smile.png">resources/icons/smile.png</file>
+        <file alias="settings.png">resources/icons/settings.png</file>
+        <file alias="memberlist.png">resources/icons/memberlist.png</file>
+        <file alias="download.png">resources/icons/download.png</file>
+        <file alias="call.png">resources/icons/call.png</file>
+        <file alias="trinity-idle.png">resources/icons/trinity-idle.png</file>
+        <file alias="directory.png">resources/icons/directory.png</file>
+        <file alias="communities.png">resources/icons/communities.png</file>
+        <file alias="add.png">resources/icons/add.png</file>
+        <file alias="markdown.png">resources/icons/markdown.png</file>
+        <file alias="smile.png">resources/icons/smile.png</file>
     </qresource>
     <qresource prefix="/style">
         <file alias="Menu.qml">qml/style/Menu.qml</file>

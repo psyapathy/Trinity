@@ -14,7 +14,9 @@ Item {
         width: 28
         height: 28
 
-        color: mouseArea.containsPress ? "#0037FD" : (mouseArea.containsMouse ? "#3486FD" : "#1e74fd")
+        property color accentColor: settings.accentColor
+
+        color: mouseArea.containsPress ? Qt.darker(accentColor, 1.5) : (mouseArea.containsMouse ? Qt.lighter(accentColor, 1.1) : accentColor)
 
         radius: 35
 
